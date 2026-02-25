@@ -1,9 +1,3 @@
----
-description: Plans contain only the plan; discuss questions first then add to plan
-alwaysApply: false
-globs: "*.plan.md"
----
-
 # Plans contain only the plan
 
 - The plan document must contain **only the plan**: concrete steps, constraints, and implementation notes.

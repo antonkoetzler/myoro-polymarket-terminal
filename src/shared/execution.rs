@@ -12,7 +12,12 @@ impl Executor {
         Self { mode }
     }
 
-    pub fn execute(&self, _market_id: &str, _side: super::strategy::Side, _amount: f64) -> Result<()> {
+    pub fn execute(
+        &self,
+        _market_id: &str,
+        _side: super::strategy::Side,
+        _amount: f64,
+    ) -> Result<()> {
         match self.mode {
             ExecutionMode::Paper => {
                 // Paper: never call CLOB; log or store for replay only.

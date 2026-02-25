@@ -47,12 +47,20 @@ impl SportsScraper {
         Ok(Self { client })
     }
 
-    /// Fetch Premier League fixtures. Tries FBRef first; on 403 uses Fixture Download JSON.
+    /// Fetch Premier League fixtures. Tries Fixture Download JSON first (no rate limit); fallback FBRef.
     pub fn fetch_pl_fixtures(&self) -> Result<Vec<Fixture>> {
+        if let Ok(fixtures) = self.fetch_pl_fixtures_fallback() {
+            if !fixtures.is_empty() {
+                return Ok(fixtures);
+            }
+        }
         let resp = self
             .client
             .get(FBREF_PL_SCHEDULE)
-            .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+            .header(
+                "Accept",
+                "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            )
             .header("Accept-Language", "en-US,en;q=0.5")
             .header("Referer", "https://fbref.com/")
             .send()
@@ -68,7 +76,12 @@ impl SportsScraper {
         anyhow::bail!(
             "FBRef schedule HTTP {}: {}",
             status,
-            body.lines().next().unwrap_or("").chars().take(80).collect::<String>()
+            body.lines()
+                .next()
+                .unwrap_or("")
+                .chars()
+                .take(80)
+                .collect::<String>()
         );
     }
 
@@ -103,18 +116,18 @@ impl SportsScraper {
 /// Parse FBRef schedule table. Table has thead + tbody; rows have data-stat="date", "home_team", etc.
 fn parse_fbref_schedule(html: &str) -> Result<Vec<Fixture>> {
     let doc = Html::parse_document(html);
-    let row_sel =
-        Selector::parse("table.stats_table tbody tr").map_err(|e| anyhow::anyhow!("selector: {}", e))?;
+    let row_sel = Selector::parse("table.stats_table tbody tr")
+        .map_err(|e| anyhow::anyhow!("selector: {}", e))?;
     let date_sel =
         Selector::parse("[data-stat=\"date\"]").map_err(|e| anyhow::anyhow!("selector: {}", e))?;
-    let home_sel =
-        Selector::parse("[data-stat=\"home_team\"]").map_err(|e| anyhow::anyhow!("selector: {}", e))?;
-    let away_sel =
-        Selector::parse("[data-stat=\"away_team\"]").map_err(|e| anyhow::anyhow!("selector: {}", e))?;
-    let home_goals_sel =
-        Selector::parse("[data-stat=\"home_goals\"]").map_err(|e| anyhow::anyhow!("selector: {}", e))?;
-    let away_goals_sel =
-        Selector::parse("[data-stat=\"away_goals\"]").map_err(|e| anyhow::anyhow!("selector: {}", e))?;
+    let home_sel = Selector::parse("[data-stat=\"home_team\"]")
+        .map_err(|e| anyhow::anyhow!("selector: {}", e))?;
+    let away_sel = Selector::parse("[data-stat=\"away_team\"]")
+        .map_err(|e| anyhow::anyhow!("selector: {}", e))?;
+    let home_goals_sel = Selector::parse("[data-stat=\"home_goals\"]")
+        .map_err(|e| anyhow::anyhow!("selector: {}", e))?;
+    let away_goals_sel = Selector::parse("[data-stat=\"away_goals\"]")
+        .map_err(|e| anyhow::anyhow!("selector: {}", e))?;
 
     let mut fixtures = Vec::new();
     for row in doc.select(&row_sel) {

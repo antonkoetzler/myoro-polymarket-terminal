@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Premier League",
+    "short": "EPL",
+    "country": "England",
+    "tier": 1,
+    "teams": ["Arsenal","Aston Villa","Bournemouth","Brentford","Brighton","Chelsea","Crystal Palace","Everton","Fulham","Ipswich Town","Leicester City","Liverpool","Manchester City","Manchester Utd","Newcastle Utd","Nottingham Forest","Southampton","Tottenham","West Ham","Wolves"]
+  },
+  {
+    "name": "La Liga",
+    "short": "LaLiga",
+    "country": "Spain",
+    "tier": 1,
+    "teams": ["Alaves","Athletic Club","Atletico Madrid","Barcelona","Betis","Celta Vigo","Espanyol","Getafe","Girona","Las Palmas","Leganes","Mallorca","Osasuna","Rayo Vallecano","Real Madrid","Real Sociedad","Sevilla","Valencia","Valladolid","Villarreal"]
+  },
+  {
+    "name": "Bundesliga",
+    "short": "Bundesliga",
+    "country": "Germany",
+    "tier": 1,
+    "teams": ["Augsburg","Bayer Leverkusen","Bayern Munich","Bochum","Borussia Dortmund","Borussia MG","Eintracht Frankfurt","Freiburg","Hamburg","Heidenheim","Hoffenheim","Holstein Kiel","Mainz","RB Leipzig","St. Pauli","Stuttgart","Union Berlin","Werder Bremen","Wolfsburg"]
+  },
+  {
+    "name": "Serie A",
+    "short": "SerieA",
+    "country": "Italy",
+    "tier": 1,
+    "teams": ["Atalanta","Bologna","Cagliari","Como","Empoli","Fiorentina","Genoa","Inter Milan","Juventus","Lazio","Lecce","Milan","Monza","Napoli","Parma","Roma","Torino","Udinese","Venice","Verona"]
+  },
+  {
+    "name": "Ligue 1",
+    "short": "Ligue1",
+    "country": "France",
+    "tier": 1,
+    "teams": ["Angers","Auxerre","Brest","Le Havre","Lens","Lille","Lyon","Marseille","Monaco","Montpellier","Nantes","Nice","PSG","Reims","Rennes","Saint-Etienne","Strasbourg","Toulouse"]
+  },
+  {
+    "name": "Champions League",
+    "short": "UCL",
+    "country": "Europe",
+    "tier": 0,
+    "teams": ["Arsenal","Atletico Madrid","Barcelona","Bayern Munich","Benfica","Bologna","Borussia Dortmund","Brest","Celtic","Club Brugge","Dinamo Zagreb","Feyenoord","Girona","Inter Milan","Juventus","Leverkusen","Lille","Liverpool","Manchester City","Milan","Monaco","PSG","PSV","RB Leipzig","Real Madrid","Red Bull Salzburg","Red Star","Shakhtar","Slovan","Sparta Prague","Sporting CP","Sturm Graz","Young Boys"]
+  },
+  {
+    "name": "Europa League",
+    "short": "UEL",
+    "country": "Europe",
+    "tier": 0,
+    "teams": ["AZ Alkmaar","Ajax","Anderlecht","Athletic Club","Besiktas","Ferencvaros","Fenerbahce","Frankfurt","FCSB","Galatasaray","Hoffenheim","Lazio","Maccabi Tel-Aviv","Malmo","Man Utd","Midtjylland","Nice","Olympiacos","Porto","Qarabag","Rangers","Real Sociedad","Roma","Slavia Prague","Spurs","Steaua","Twente","Union SG","Viktoria Plzen"]
+  },
+  {
+    "name": "Eredivisie",
+    "short": "Eredivisie",
+    "country": "Netherlands",
+    "tier": 1,
+    "teams": ["Ajax","AZ Alkmaar","Feyenoord","NEC Nijmegen","PSV Eindhoven","Twente","Utrecht"]
+  },
+  {
+    "name": "MLS",
+    "short": "MLS",
+    "country": "USA",
+    "tier": 1,
+    "teams": ["Atlanta United","Austin FC","Charlotte FC","Chicago Fire","Colorado Rapids","Columbus Crew","D.C. United","FC Cincinnati","FC Dallas","Houston Dynamo","Inter Miami","LA Galaxy","LAFC","Minnesota United","Nashville SC","New England Revolution","New York City FC","New York Red Bulls","Orlando City","Philadelphia Union","Portland Timbers","Real Salt Lake","San Jose Earthquakes","Seattle Sounders","Sporting KC","St. Louis City","Toronto FC","Vancouver Whitecaps"]
+  },
+  {
+    "name": "Brazilian Serie A",
+    "short": "BRA",
+    "country": "Brazil",
+    "tier": 1,
+    "teams": ["Atletico Mineiro","Athletico Paranaense","Bahia","Botafogo","Bragantino","Corinthians","Criciuma","Cruzeiro","Cuiaba","Flamengo","Fluminense","Fortaleza","Gremio","Internacional","Juventude","Palmeiras","Santos","Sao Paulo","Vasco da Gama","Vitoria"]
+  }
+]

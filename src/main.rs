@@ -4,13 +4,14 @@ mod config;
 mod copy_trading;
 mod discover;
 mod live;
-mod trader_stats;
 mod pm;
 mod shared;
+mod sports;
 mod strategies;
 mod tui;
+mod weather;
 
 fn main() -> anyhow::Result<()> {
-    let _config = config::load()?;
-    tui::run()
+    let config = config::load()?;
+    tui::run(config)
 }

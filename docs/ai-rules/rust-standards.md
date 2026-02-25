@@ -1,14 +1,8 @@
----
-description: Rust standards — uniform, anti-fragile, scalable, flexible, consistent
-globs: "**/*.rs"
-alwaysApply: false
----
-
 # Rust standards
 
-Follow the project’s Rust standards document for all Rust code.
+Follow the project's Rust standards document for all Rust code.
 
-**Canonical reference:** [docs/STANDARDS.md](docs/STANDARDS.md)
+**Canonical reference:** [docs/standards/STANDARDS.md](../standards/STANDARDS.md)
 
 Summary:
 

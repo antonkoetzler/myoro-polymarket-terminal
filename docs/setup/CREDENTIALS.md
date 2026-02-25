@@ -12,10 +12,7 @@
 - **BINANCE_API_KEY** — Only needed if we use authenticated endpoints. Public WebSocket (e.g. kline, bookTicker) often works without a key.
   - **How:** [Binance](https://www.binance.com/) → Profile → API Management → Create API. Restrict to “Enable Reading” if you only need data.
 
-## App mode
-
-- **EXECUTION_MODE** — `paper` (default) or `live`. No key; set in `.env` when you want real orders.
-
 ---
 
-Put values in a `.env` file in the project root (see `.env.example`). Never commit `.env`.
+Put credentials in `.env` (see `.env.example`). Never commit `.env`.  
+App settings (paper bankroll, execution mode, copy traders, poll interval) live in `config.json` (see `config.json.example`).

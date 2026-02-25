@@ -1,11 +1,13 @@
 //! Discover Polymarket profiles via Data API leaderboard. Background scan enriches with trade count + category.
 
+pub mod trader_stats;
+
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::RwLock;
 
-use crate::trader_stats::{self, TraderStats};
+use self::trader_stats::TraderStats;
 
 const LEADERBOARD: &str = "https://data-api.polymarket.com/v1/leaderboard";
 const PAGE_SIZE: u32 = 50;
@@ -32,6 +34,7 @@ struct ApiEntry {
 }
 
 #[derive(Clone, Copy, Debug, Default)]
+#[allow(clippy::upper_case_acronyms)] // Polymarket API expects OVERALL, CRYPTO, etc.
 pub enum LeaderboardCategory {
     #[default]
     OVERALL,
@@ -46,6 +49,7 @@ pub enum LeaderboardCategory {
 }
 
 #[derive(Clone, Copy, Debug, Default)]
+#[allow(clippy::upper_case_acronyms)] // API expects DAY, WEEK, etc.
 pub enum TimePeriod {
     DAY,
     #[default]
@@ -55,6 +59,7 @@ pub enum TimePeriod {
 }
 
 #[derive(Clone, Copy, Debug, Default)]
+#[allow(clippy::upper_case_acronyms)] // API expects PNL, VOL
 pub enum OrderBy {
     #[default]
     PNL,
@@ -92,9 +97,27 @@ impl DiscoverState {
 
     pub fn fetch(&self) {
         self.fetching.store(true, Ordering::SeqCst);
-        let cat = self.category.read().ok().map(|c| format!("{:?}", c)).unwrap_or_else(|| "OVERALL".to_string());
-        let period = self.time_period.read().ok().map(|p| format!("{:?}", p)).unwrap_or_else(|| "WEEK".to_string());
-        let order = self.order_by.read().ok().map(|o| format!("{:?}", o)).unwrap_or_else(|| "PNL".to_string());
+        if let Ok(mut g) = self.entries.write() {
+            *g = Vec::new();
+        }
+        let cat = self
+            .category
+            .read()
+            .ok()
+            .map(|c| format!("{:?}", c))
+            .unwrap_or_else(|| "OVERALL".to_string());
+        let period = self
+            .time_period
+            .read()
+            .ok()
+            .map(|p| format!("{:?}", p))
+            .unwrap_or_else(|| "WEEK".to_string());
+        let order = self
+            .order_by
+            .read()
+            .ok()
+            .map(|o| format!("{:?}", o))
+            .unwrap_or_else(|| "PNL".to_string());
         let client = match reqwest::blocking::Client::builder()
             .timeout(std::time::Duration::from_secs(15))
             .build()
@@ -193,15 +216,120 @@ impl DiscoverState {
     }
 
     pub fn category_label(&self) -> String {
-        self.category.read().ok().map(|c| format!("{:?}", c)).unwrap_or_else(|| "OVERALL".to_string())
+        use LeaderboardCategory::*;
+        self.category
+            .read()
+            .ok()
+            .map(|c| match *c {
+                OVERALL => "ALL".to_string(),
+                other => format!("{:?}", other),
+            })
+            .unwrap_or_else(|| "ALL".to_string())
     }
 
     pub fn time_period_label(&self) -> String {
-        self.time_period.read().ok().map(|p| format!("{:?}", p)).unwrap_or_else(|| "WEEK".to_string())
+        self.time_period
+            .read()
+            .ok()
+            .map(|p| format!("{:?}", p))
+            .unwrap_or_else(|| "WEEK".to_string())
     }
 
     pub fn order_by_label(&self) -> String {
-        self.order_by.read().ok().map(|o| format!("{:?}", o)).unwrap_or_else(|| "PNL".to_string())
+        use OrderBy::*;
+        self.order_by
+            .read()
+            .ok()
+            .map(|o| match *o {
+                PNL => "P&L".to_string(),
+                VOL => "VOL".to_string(),
+            })
+            .unwrap_or_else(|| "P&L".to_string())
+    }
+
+    pub fn category_index(&self) -> usize {
+        use LeaderboardCategory::*;
+        self.category
+            .read()
+            .ok()
+            .map(|c| match *c {
+                OVERALL => 0,
+                CRYPTO => 1,
+                SPORTS => 2,
+                POLITICS => 3,
+                CULTURE => 4,
+                WEATHER => 5,
+                ECONOMICS => 6,
+                TECH => 7,
+                FINANCE => 8,
+            })
+            .unwrap_or(0)
+    }
+
+    pub fn set_category_by_index(&self, i: usize) {
+        use LeaderboardCategory::*;
+        let c = match i % 9 {
+            0 => OVERALL,
+            1 => CRYPTO,
+            2 => SPORTS,
+            3 => POLITICS,
+            4 => CULTURE,
+            5 => WEATHER,
+            6 => ECONOMICS,
+            7 => TECH,
+            _ => FINANCE,
+        };
+        if let Ok(mut g) = self.category.write() {
+            *g = c;
+        }
+    }
+
+    /// Index for dialog: 0=ALL, 1=DAY, 2=WEEK, 3=MONTH (ALL at top).
+    pub fn time_period_index(&self) -> usize {
+        use TimePeriod::*;
+        self.time_period
+            .read()
+            .ok()
+            .map(|p| match *p {
+                ALL => 0,
+                DAY => 1,
+                WEEK => 2,
+                MONTH => 3,
+            })
+            .unwrap_or(2)
+    }
+
+    pub fn set_time_period_by_index(&self, i: usize) {
+        use TimePeriod::*;
+        let p = match i % 4 {
+            0 => ALL,
+            1 => DAY,
+            2 => WEEK,
+            _ => MONTH,
+        };
+        if let Ok(mut g) = self.time_period.write() {
+            *g = p;
+        }
+    }
+
+    pub fn order_by_index(&self) -> usize {
+        use OrderBy::*;
+        self.order_by
+            .read()
+            .ok()
+            .map(|o| match *o {
+                PNL => 0,
+                VOL => 1,
+            })
+            .unwrap_or(0)
+    }
+
+    pub fn set_order_by_index(&self, i: usize) {
+        use OrderBy::*;
+        let o = if i.is_multiple_of(2) { PNL } else { VOL };
+        if let Ok(mut g) = self.order_by.write() {
+            *g = o;
+        }
     }
 
     pub fn get_stats(&self, address: &str) -> Option<TraderStats> {
@@ -222,7 +350,7 @@ impl DiscoverState {
         let addr = entries[*idx].proxy_wallet.clone();
         *idx = (*idx + 1) % len;
         drop(idx);
-        if let Some(stats) = trader_stats::fetch_stats(&addr) {
+        if let Some(stats) = self::trader_stats::fetch_stats(&addr) {
             if let Ok(mut cache) = self.stats_cache.write() {
                 cache.insert(addr, stats);
             }

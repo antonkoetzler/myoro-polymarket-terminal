@@ -2658,6 +2658,7 @@ name = "myoro-polymarket-terminal"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "chrono",
  "crossterm",
  "dotenvy",
  "polymarket-client-sdk",

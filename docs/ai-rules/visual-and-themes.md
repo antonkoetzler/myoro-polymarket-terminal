@@ -1,8 +1,3 @@
----
-description: When working on visual/UI or colors, apply changes to all provided color themes
-globs: "**/tui/**"
----
-
 # Visual and theme consistency
 
 When changing colors, contrast, or any visual matter in the TUI:

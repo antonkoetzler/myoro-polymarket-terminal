@@ -1,4 +1,4 @@
-//! Per-profile stats from Data API /trades: trade count (frequency), top category. Same definition for all.
+//! Per-profile stats from Data API /trades: trade count (frequency), top category.
 
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -28,13 +28,26 @@ fn infer_category(slug: &str, event_slug: &str) -> &'static str {
     let s = format!("{} {}", slug.to_lowercase(), event_slug.to_lowercase());
     if s.contains("bitcoin") || s.contains("btc") || s.contains("crypto") || s.contains("eth") {
         "Crypto"
-    } else if s.contains("trump") || s.contains("election") || s.contains("biden") || s.contains("politic") {
+    } else if s.contains("trump")
+        || s.contains("election")
+        || s.contains("biden")
+        || s.contains("politic")
+    {
         "Politics"
-    } else if s.contains("sport") || s.contains("nfl") || s.contains("nba") || s.contains("game") || s.contains("match") {
+    } else if s.contains("sport")
+        || s.contains("nfl")
+        || s.contains("nba")
+        || s.contains("game")
+        || s.contains("match")
+    {
         "Sports"
     } else if s.contains("weather") || s.contains("temp") || s.contains("rain") {
         "Weather"
-    } else if s.contains("fed") || s.contains("inflation") || s.contains("gdp") || s.contains("econom") {
+    } else if s.contains("fed")
+        || s.contains("inflation")
+        || s.contains("gdp")
+        || s.contains("econom")
+    {
         "Economics"
     } else if s.contains("tech") || s.contains("stock") || s.contains("nasdaq") {
         "Tech"
@@ -56,9 +69,7 @@ pub fn fetch_stats(address: &str) -> Option<TraderStats> {
     loop {
         let url = format!(
             "{}?user={}&limit=100&offset={}&takerOnly=false",
-            TRADES,
-            address,
-            offset
+            TRADES, address, offset
         );
         let list: Vec<ApiTrade> = client.get(&url).send().ok()?.json().ok()?;
         if list.is_empty() {

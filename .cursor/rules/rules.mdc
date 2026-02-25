@@ -1,0 +1,28 @@
+---
+description: Centralized AI assistant rules — references docs/ai-rules/*
+alwaysApply: true
+---
+
+# AI Assistant Rules
+
+This project centralizes all AI assistant rules in `docs/ai-rules/`. Read and follow ALL of these files:
+
+## Core Rules
+
+1. **[Code Owner](../../docs/ai-rules/code-owner.md)** — You own the full development lifecycle. No "TODO" or "fix later" handoffs.
+
+2. **[Polymarket Arbitrage](../../docs/ai-rules/polymarket-arbitrage.md)** — Building hands-off money printers. Edge first, automate everything, data over gut, risk-aware.
+
+3. **[Rust Standards](../../docs/ai-rules/rust-standards.md)** — Follow [docs/standards/STANDARDS.md](../../docs/standards/STANDARDS.md) for all Rust code. Uniform, anti-fragile, scalable, flexible, consistent.
+
+4. **[Concise Responses](../../docs/ai-rules/concise-responses.md)** — Be concise and to-the-point. No long descriptions or unnecessary explanation.
+
+5. **[Plans Contain Only Plan](../../docs/ai-rules/plans-contain-only-plan.md)** — Plan documents contain only concrete steps. No "TBD" sections. Discuss questions first, then incorporate answers.
+
+6. **[Visual and Theme Consistency](../../docs/ai-rules/visual-and-themes.md)** — When changing TUI colors, apply to ALL theme presets in `src/tui/theme.rs`.
+
+## How to Use These Rules
+
+- Read the referenced files in `docs/ai-rules/` for complete context
+- Apply rules based on the task at hand (e.g., visual-and-themes only applies when editing TUI code)
+- When in doubt, refer to `docs/standards/STANDARDS.md` for Rust-specific guidance

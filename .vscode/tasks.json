@@ -31,6 +31,21 @@
       }
     },
     {
+      "label": "Test (verbose)",
+      "type": "shell",
+      "command": "cargo",
+      "args": [
+        "test",
+        "--",
+        "--nocapture"
+      ],
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
       "label": "cargo clippy",
       "type": "shell",
       "command": "cargo",

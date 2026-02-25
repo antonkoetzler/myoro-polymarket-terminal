@@ -1,0 +1,15 @@
+{
+  "paper_bankroll": 10000,
+  "execution_mode": "paper",
+  "copy_traders": [],
+  "copy_poll_ms": 250,
+  "pnl_currency": "USD",
+  "copy_sizing": "proportional",
+  "copy_trader_bankrolls": {
+    "0x1234567890123456789012345678901234567890": 10000
+  },
+  "copy_bankroll_fraction": 0.05,
+  "copy_max_usd": 1000,
+  "copy_auto_execute": false,
+  "paper_trades_file": "data/paper_copy_trades.jsonl"
+}

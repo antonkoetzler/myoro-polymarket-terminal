@@ -2,5 +2,5 @@
 
 #![allow(dead_code)]
 
-pub mod data;
 pub mod backtest;
+pub mod data;

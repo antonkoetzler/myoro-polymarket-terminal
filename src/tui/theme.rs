@@ -55,17 +55,39 @@ impl ThemePalette {
             _ => {}
         }
     }
-    pub fn bg(&self) -> Color { Self::rgb(self.bg) }
-    pub fn panel_bg(&self) -> Color { Self::rgb(self.panel_bg) }
-    pub fn border(&self) -> Color { Self::rgb(self.border) }
-    pub fn heading(&self) -> Color { Self::rgb(self.heading) }
-    pub fn body(&self) -> Color { Self::rgb(self.body) }
-    pub fn dim(&self) -> Color { Self::rgb(self.dim) }
-    pub fn accent(&self) -> Color { Self::rgb(self.accent) }
-    pub fn success(&self) -> Color { Self::rgb(self.success) }
-    pub fn key(&self) -> Color { Self::rgb(self.key) }
-    pub fn danger(&self) -> Color { Self::rgb(self.danger) }
-    pub fn neutral_pnl(&self) -> Color { Self::rgb(self.neutral_pnl) }
+    pub fn bg(&self) -> Color {
+        Self::rgb(self.bg)
+    }
+    pub fn panel_bg(&self) -> Color {
+        Self::rgb(self.panel_bg)
+    }
+    pub fn border(&self) -> Color {
+        Self::rgb(self.border)
+    }
+    pub fn heading(&self) -> Color {
+        Self::rgb(self.heading)
+    }
+    pub fn body(&self) -> Color {
+        Self::rgb(self.body)
+    }
+    pub fn dim(&self) -> Color {
+        Self::rgb(self.dim)
+    }
+    pub fn accent(&self) -> Color {
+        Self::rgb(self.accent)
+    }
+    pub fn success(&self) -> Color {
+        Self::rgb(self.success)
+    }
+    pub fn key(&self) -> Color {
+        Self::rgb(self.key)
+    }
+    pub fn danger(&self) -> Color {
+        Self::rgb(self.danger)
+    }
+    pub fn neutral_pnl(&self) -> Color {
+        Self::rgb(self.neutral_pnl)
+    }
 }
 
 fn default_dark() -> ThemePalette {
@@ -154,13 +176,7 @@ fn monokai() -> ThemePalette {
 }
 
 pub fn predefined_themes() -> Vec<ThemePalette> {
-    vec![
-        default_dark(),
-        nord(),
-        dracula(),
-        green(),
-        monokai(),
-    ]
+    vec![default_dark(), nord(), dracula(), green(), monokai()]
 }
 
 static THEME_STATE: std::sync::OnceLock<RwLock<ThemeState>> = std::sync::OnceLock::new();
@@ -174,7 +190,10 @@ pub struct ThemeState {
 fn theme_state() -> &'static RwLock<ThemeState> {
     THEME_STATE.get_or_init(|| {
         let palettes = predefined_themes();
-        RwLock::new(ThemeState { current: 0, palettes })
+        RwLock::new(ThemeState {
+            current: 0,
+            palettes,
+        })
     })
 }
 
@@ -183,9 +202,14 @@ pub fn init_themes() {
 }
 
 pub fn current_palette() -> ThemePalette {
+    // Init runs at startup; lock only poisoned on panic.
     let state = theme_state().read().expect("theme lock");
     let idx = state.current.min(state.palettes.len().saturating_sub(1));
-    state.palettes.get(idx).cloned().unwrap_or_else(|| default_dark())
+    state
+        .palettes
+        .get(idx)
+        .cloned()
+        .unwrap_or_else(default_dark)
 }
 
 pub fn theme_count() -> usize {
@@ -218,9 +242,14 @@ pub fn add_custom_theme(p: ThemePalette) -> usize {
 }
 
 pub fn export_current_theme(path: &std::path::Path) -> std::io::Result<()> {
-    let state = theme_state().read().map_err(|_| std::io::ErrorKind::Other)?;
+    let state = theme_state()
+        .read()
+        .map_err(|_| std::io::ErrorKind::Other)?;
     let idx = state.current.min(state.palettes.len().saturating_sub(1));
-    let p = state.palettes.get(idx).ok_or(std::io::ErrorKind::NotFound)?;
+    let p = state
+        .palettes
+        .get(idx)
+        .ok_or(std::io::ErrorKind::NotFound)?;
     let s = toml::to_string_pretty(p).map_err(|_| std::io::ErrorKind::InvalidData)?;
     std::fs::write(path, s)
 }
@@ -264,8 +293,17 @@ pub const COLOR_PRESETS: [[u8; 3]; 24] = [
 ];
 
 pub const THEME_CREATOR_ROLES: &[&str] = &[
-    "Background", "Panel BG", "Border", "Heading", "Body", "Dim",
-    "Accent", "Success", "Key", "Danger", "Neutral PnL",
+    "Background",
+    "Panel BG",
+    "Border",
+    "Heading",
+    "Body",
+    "Dim",
+    "Accent",
+    "Success",
+    "Key",
+    "Danger",
+    "Neutral P&L",
 ];
 
 /// Theme facade: all styles read from current palette.
@@ -276,13 +314,23 @@ impl Theme {
         Style::default().fg(current_palette().border())
     }
     pub fn block_title() -> Style {
-        Style::default().fg(current_palette().heading()).add_modifier(Modifier::BOLD)
+        Style::default()
+            .fg(current_palette().heading())
+            .add_modifier(Modifier::BOLD)
+    }
+    /// Metrics section labels (bold, heading color).
+    pub fn metrics_label() -> Style {
+        Style::default()
+            .fg(current_palette().heading())
+            .add_modifier(Modifier::BOLD)
     }
     pub fn tab_default() -> Style {
         Style::default().fg(current_palette().dim())
     }
     pub fn tab_selected() -> Style {
-        Style::default().fg(current_palette().accent()).add_modifier(Modifier::BOLD)
+        Style::default()
+            .fg(current_palette().accent())
+            .add_modifier(Modifier::BOLD)
     }
     pub fn body() -> Style {
         Style::default().fg(current_palette().body())
@@ -311,9 +359,13 @@ impl Theme {
     }
     /// For layout background/panel.
     #[allow(non_snake_case)]
-    pub fn BG() -> Color { current_palette().bg() }
+    pub fn BG() -> Color {
+        current_palette().bg()
+    }
     #[allow(non_snake_case)]
-    pub fn PANEL_BG() -> Color { current_palette().panel_bg() }
+    pub fn PANEL_BG() -> Color {
+        current_palette().panel_bg()
+    }
 }
 
 #[cfg(test)]
