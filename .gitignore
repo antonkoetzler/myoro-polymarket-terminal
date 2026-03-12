@@ -1,4 +1,14 @@
 /target
 .env
 config.json
+
+# Runtime data — never commit
 data/*.jsonl
+data/*.json
+data/*.db
+
+# Generated files
+gen/
+
+# Editor / tool state
+.claude/
